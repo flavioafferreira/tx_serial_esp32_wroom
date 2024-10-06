@@ -1,0 +1,10 @@
+CMake Error at C:/Users/rfidf/esp/v5.3.1/esp-idf/tools/cmake/component.cmake:251 (message):
+  ERROR: Cannot find component list file.  Please make sure this script is
+  executed from CMake
+
+Call Stack (most recent call first):
+  C:/Users/rfidf/esp/v5.3.1/esp-idf/tools/cmake/build.cmake:586 (__component_get_requirements)
+  C:/Users/rfidf/esp/v5.3.1/esp-idf/tools/cmake/project.cmake:710 (idf_build_process)
+  CMakeLists.txt:6 (project)
+
+
