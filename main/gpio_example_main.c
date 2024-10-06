@@ -26,7 +26,7 @@ void app_main(void)
 {
    ///TX at 10baud
   
-    #define QUANT 10  // Número de caracteres no texto "###;flavio;ercolano;123456;"
+    #define QUANT 10  // calendar
 
     uint8_t data[QUANT] = {
         0x63, 0x61, 0x6C, 0x65, 0x6E, 0x64, 0x61, 0x72, 0x3B, 0x0D
