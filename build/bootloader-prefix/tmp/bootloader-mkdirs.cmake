@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "C:/Users/rfidf/esp/v5.3.1/esp-idf/components/bootloader/subproject"
+  "C:/Users/f.ferreira/esp/v5.3.1/esp-idf/components/bootloader/subproject"
   "C:/ESP32/tx_serial_esp32_wroom/build/bootloader"
   "C:/ESP32/tx_serial_esp32_wroom/build/bootloader-prefix"
   "C:/ESP32/tx_serial_esp32_wroom/build/bootloader-prefix/tmp"
