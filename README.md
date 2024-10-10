@@ -1,5 +1,5 @@
 
-# VERY SLOW SOFT UART EXAMPLE
+# VERY SLOW SOFT UART EXAMPLE FOR ESP32
 
 Very Very simple Soft serial for test purposes with very slow from 1baud up to 100baud
 You can type at 115200bps will output at from 1bps upto 100bps, you can define
