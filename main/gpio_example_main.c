@@ -1,4 +1,4 @@
-/* SOFT UART Example for very slow communication
+/* SOFT UART Example for very slow communication FOR ESP32
 
    This example code is in the Public Domain (or CC0 licensed, at your option.)
 
@@ -16,8 +16,8 @@
 #include "driver/gpio.h"
 #include "driver/uart.h"
 
-#define ON 1
-#define OFF 0
+#define ON 0X01
+#define OFF 0X00
 
 //UART COM1 COMMUNICATION 
 #define UART_PORT UART_NUM_0      
@@ -27,7 +27,10 @@
 //SOFT UART COMMUNICATION - ONLY TX 
 #define TX_BAUD_RATE 10  //from 1 up to 100 bps
 #define TX_PIN GPIO_NUM_15
-#define Parity OFF
+#define Parity ON            //ODD PARITY ON-OFF   
+#define LEVEL_HIGH ON        //SERIAL SIGNAL INVERSION - HERE YOU CAN INVERT THE SERIAL LOGIC 1 TO 0
+#define LEVEL_LOW !LEVEL_HIGH
+
 
 #define STRING_SIZE 120
 typedef struct data_buff_ {
@@ -49,7 +52,6 @@ void uart_soft_tx_chars(data_buff *payload);
 QueueHandle_t spp_uart_queue = NULL;
 fifo_queue q;
 fifo_queue q_tx;
-
 data_buff item;
 
 //QUEUE FUNCTIONS
@@ -164,15 +166,15 @@ void uart_soft_tx_chars(data_buff *payload){
   uint8_t data_tx=0;
   uint8_t i=0,j=0;
     
-    gpio_set_level(TX_PIN, ON);
+    gpio_set_level(TX_PIN, LEVEL_HIGH);
     while (j<payload->size) {
-        gpio_set_level(TX_PIN, ON);
+        gpio_set_level(TX_PIN, LEVEL_HIGH);
         vTaskDelay((5*1000/TX_BAUD_RATE) / portTICK_PERIOD_MS);
-        gpio_set_level(TX_PIN, OFF);
+        gpio_set_level(TX_PIN, LEVEL_LOW);
         vTaskDelay((1000/TX_BAUD_RATE) / portTICK_PERIOD_MS); //start bit
         data_tx=payload->To_Send[j];
 
-        uint8_t parity_bit = 0;     
+        uint8_t parity_bit = LEVEL_LOW;     
 
         uint8_t count_ones = 0;     
         for (uint8_t i = 0; i < 8; i++) {
@@ -183,12 +185,14 @@ void uart_soft_tx_chars(data_buff *payload){
 
         // parity calculus
         if (count_ones % 2 != 0) {
-            parity_bit = 1;
+            parity_bit = LEVEL_HIGH;
         }
 
         i=0;
         while (i<=7){
-               uint8_t bit=data_tx & 0x01;
+               uint8_t bit;
+               if(LEVEL_HIGH)bit=data_tx & 1;
+               if(LEVEL_LOW)bit=!(data_tx & 1);
                gpio_set_level(TX_PIN, bit);
                data_tx=data_tx >> 1;
                i++; 
@@ -198,7 +202,7 @@ void uart_soft_tx_chars(data_buff *payload){
           gpio_set_level(TX_PIN, !parity_bit);
           vTaskDelay((1000/TX_BAUD_RATE) / portTICK_PERIOD_MS); //ODD parity bit
         }
-        gpio_set_level(TX_PIN, ON);
+        gpio_set_level(TX_PIN, LEVEL_HIGH);
         vTaskDelay((1000/TX_BAUD_RATE) / portTICK_PERIOD_MS); //stop bit
 
         j++; 
@@ -215,7 +219,7 @@ void soft_uart_task_tx(void *pvParameters){
   gpio_set_direction(TX_PIN, GPIO_MODE_OUTPUT);
   gpio_pullup_en(TX_PIN);
   gpio_pulldown_dis(TX_PIN);
-  gpio_set_level(TX_PIN, ON);
+  gpio_set_level(TX_PIN, LEVEL_HIGH);
 
 
   while (1) {
@@ -225,7 +229,6 @@ void soft_uart_task_tx(void *pvParameters){
     vTaskDelay(100 / portTICK_PERIOD_MS);            
   }
 }
-
 
 void uart_task_tx(void *pvParameters){
   data_buff payload;
