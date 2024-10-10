@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "generic_gpio",
-    "project_version":    "fc87878-dirty",
+    "project_version":    "f8e0ca3-dirty",
     "project_path":       "C:/ESP32/tx_serial_esp32_wroom",
     "idf_path":           "C:/Users/f.ferreira/esp/v5.3.1/esp-idf",
     "build_dir":          "C:/ESP32/tx_serial_esp32_wroom/build",

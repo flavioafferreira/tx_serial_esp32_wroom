@@ -25,11 +25,11 @@
 #define RX_BUF_SIZE  1024
 
 //SOFT UART COMMUNICATION - ONLY TX 
-#define TX_BAUD_RATE 10  //from 1 up to 100 bps
-#define TX_PIN GPIO_NUM_15
-#define Parity ON            //ODD PARITY ON-OFF   
-#define LEVEL_HIGH ON        //SERIAL SIGNAL INVERSION - HERE YOU CAN INVERT THE SERIAL LOGIC 1 TO 0
-#define LEVEL_LOW !LEVEL_HIGH
+#define TX_BAUD_RATE 10       //from 1 up to 100 bps
+#define TX_PIN GPIO_NUM_15    // CHOOSE THE PIN
+#define PARITY_ON OFF         //ODD PARITY ON|OFF   
+#define LEVEL_HIGH OFF        // ON|OFF SERIAL SIGNAL INVERSION - HERE YOU CAN INVERT THE SERIAL LOGIC 1 TO 0
+#define LEVEL_LOW !LEVEL_HIGH 
 
 
 #define STRING_SIZE 120
@@ -198,7 +198,7 @@ void uart_soft_tx_chars(data_buff *payload){
                i++; 
                vTaskDelay((1000/TX_BAUD_RATE) / portTICK_PERIOD_MS);
         }
-        if (Parity){
+        if (PARITY_ON){
           gpio_set_level(TX_PIN, !parity_bit);
           vTaskDelay((1000/TX_BAUD_RATE) / portTICK_PERIOD_MS); //ODD parity bit
         }
